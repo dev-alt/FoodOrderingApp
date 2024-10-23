@@ -16,7 +16,6 @@ namespace FoodOrdering.Shared.Models
         public OrderStatus Status { get; set; }
         public List<OrderItem> Items { get; set; } = [];
         public decimal TotalAmount { get; set; }
-        public DateTime? CompletedDate { get; set; }
     }
 
 }

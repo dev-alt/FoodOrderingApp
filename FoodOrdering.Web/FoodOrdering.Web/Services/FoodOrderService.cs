@@ -5,36 +5,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodOrdering.Web.Services
 {
-    public class FoodOrderingService : IFoodOrderingService
+    public class FoodOrderingService(ApplicationDbContext context) : IFoodOrderingService
     {
-        private readonly ApplicationDbContext _context;
-
-        public FoodOrderingService(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         // Menu Item Methods
         public async Task<List<MenuItem>> GetMenuItemsAsync()
         {
-            return await _context.MenuItems.ToListAsync();
+            return await context.MenuItems.ToListAsync();
         }
 
         public async Task<MenuItem?> GetMenuItemAsync(int id)
         {
-            return await _context.MenuItems.FindAsync(id);
+            return await context.MenuItems.FindAsync(id);
         }
 
-        public async Task<MenuItem> CreateMenuItemAsync(MenuItem item)
+        public async Task<MenuItem?> CreateMenuItemAsync(MenuItem item)
         {
-            _context.MenuItems.Add(item);
-            await _context.SaveChangesAsync();
-            return item;
+            context.MenuItems.Add(item);
+            var result = await context.SaveChangesAsync();
+
+            return result > 0 ? item : null;
         }
+
 
         public async Task<bool> UpdateMenuItemAsync(int id, MenuItem item)
         {
-            var existingItem = await _context.MenuItems.FindAsync(id);
+            var existingItem = await context.MenuItems.FindAsync(id);
             if (existingItem == null) return false;
 
             existingItem.Name = item.Name;
@@ -45,7 +40,7 @@ namespace FoodOrdering.Web.Services
 
             try
             {
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -56,18 +51,18 @@ namespace FoodOrdering.Web.Services
 
         public async Task<bool> DeleteMenuItemAsync(int id)
         {
-            var item = await _context.MenuItems.FindAsync(id);
+            var item = await context.MenuItems.FindAsync(id);
             if (item == null) return false;
 
-            _context.MenuItems.Remove(item);
-            await _context.SaveChangesAsync();
+            context.MenuItems.Remove(item);
+            await context.SaveChangesAsync();
             return true;
         }
 
         // Order Methods
         public async Task<List<Order>> GetOrdersAsync()
         {
-            return await _context.Orders
+            return await context.Orders
                 .Include(o => o.Items)
                     .ThenInclude(i => i.MenuItem)
                 .OrderByDescending(o => o.OrderDate)
@@ -76,7 +71,7 @@ namespace FoodOrdering.Web.Services
 
         public async Task<Order?> GetOrderAsync(int id)
         {
-            return await _context.Orders
+            return await context.Orders
                 .Include(o => o.Items)
                     .ThenInclude(i => i.MenuItem)
                 .FirstOrDefaultAsync(o => o.Id == id);
@@ -94,8 +89,8 @@ namespace FoodOrdering.Web.Services
             order.Status = OrderStatus.Pending;
 
             // Add order to context
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+            context.Orders.Add(order);
+            await context.SaveChangesAsync();
 
             return order;
         }
@@ -104,7 +99,7 @@ namespace FoodOrdering.Web.Services
         {
             try
             {
-                var order = await _context.Orders.FindAsync(id);
+                var order = await context.Orders.FindAsync(id);
                 if (order == null) return false;
 
                 // Validate status transition
@@ -113,13 +108,13 @@ namespace FoodOrdering.Web.Services
 
                 order.Status = newStatus;
 
-                // If order is completed or cancelled, set completion date
-                if (newStatus == OrderStatus.Completed || newStatus == OrderStatus.Cancelled)
-                {
-                    order.CompletedDate = DateTime.UtcNow;
-                }
+                //// If order is completed or cancelled, set completion date
+                //if (newStatus == OrderStatus.Completed || newStatus == OrderStatus.Cancelled)
+                //{
+                //    order.CompletedDate = DateTime.UtcNow;
+                //}
 
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -132,7 +127,7 @@ namespace FoodOrdering.Web.Services
         {
             try
             {
-                var order = await _context.Orders.FindAsync(id);
+                var order = await context.Orders.FindAsync(id);
                 if (order == null) return false;
 
                 // Only pending or confirmed orders can be cancelled
@@ -140,9 +135,9 @@ namespace FoodOrdering.Web.Services
                     return false;
 
                 order.Status = OrderStatus.Cancelled;
-                order.CompletedDate = DateTime.UtcNow;
+                //order.CompletedDate = DateTime.UtcNow;
 
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return true;
             }
             catch
@@ -152,7 +147,7 @@ namespace FoodOrdering.Web.Services
         }
 
         // Helper method to validate status transitions
-        private bool IsValidStatusTransition(OrderStatus currentStatus, OrderStatus newStatus)
+        private static bool IsValidStatusTransition(OrderStatus currentStatus, OrderStatus newStatus)
         {
             return (currentStatus, newStatus) switch
             {

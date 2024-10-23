@@ -16,6 +16,6 @@ namespace FoodOrdering.Shared.Models
         public bool IsAvailable { get; set; }
 
         // Navigation property
-        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public ICollection<OrderItem> OrderItems { get; set; } = [];
     }
 }

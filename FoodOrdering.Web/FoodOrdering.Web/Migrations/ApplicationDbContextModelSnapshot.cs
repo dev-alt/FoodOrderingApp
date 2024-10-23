@@ -36,10 +36,11 @@ namespace FoodOrdering.Web.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -54,10 +55,12 @@ namespace FoodOrdering.Web.Migrations
 
                     b.Property<string>("CustomerName")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CustomerPhone")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("OrderDate")
@@ -67,7 +70,7 @@ namespace FoodOrdering.Web.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -83,22 +86,27 @@ namespace FoodOrdering.Web.Migrations
                     b.Property<int>("MenuItemId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MenuItemId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MenuItemId");
+
+                    b.HasIndex("MenuItemId1");
 
                     b.HasIndex("OrderId");
 
@@ -110,14 +118,27 @@ namespace FoodOrdering.Web.Migrations
                     b.HasOne("FoodOrdering.Shared.Models.MenuItem", "MenuItem")
                         .WithMany()
                         .HasForeignKey("MenuItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FoodOrdering.Shared.Models.MenuItem", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("MenuItemId1");
+
+                    b.HasOne("FoodOrdering.Shared.Models.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FoodOrdering.Shared.Models.Order", null)
-                        .WithMany("Items")
-                        .HasForeignKey("OrderId");
-
                     b.Navigation("MenuItem");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("FoodOrdering.Shared.Models.MenuItem", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("FoodOrdering.Shared.Models.Order", b =>

@@ -24,8 +24,15 @@ namespace FoodOrdering.Web.Api
             group.MapPost("/menu", async ([FromBody] MenuItem item, [FromServices] IFoodOrderingService service) =>
             {
                 var result = await service.CreateMenuItemAsync(item);
+
+                if (result is null)
+                {
+                    return Results.BadRequest("Failed to create menu item."); // You can choose a different response if needed
+                }
+
                 return Results.Created($"/api/menu/{result.Id}", result);
             });
+
 
             group.MapPut("/menu/{id}", async (int id, [FromBody] MenuItem item, [FromServices] IFoodOrderingService service) =>
             {

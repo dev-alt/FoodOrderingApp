@@ -124,12 +124,12 @@
         await LoadOrders();
     }
 
-    private void ClearFilter()
+    private async Task ClearFilter()
     {
         selectedStatus = null;
-        LoadOrders();
+        await LoadOrders();
     }
-
+    
     private string GetStatusButtonClass(OrderStatus status) =>
         status == selectedStatus
             ? "px-3 py-1 rounded-md text-sm bg-primary text-primary-foreground"
@@ -152,6 +152,14 @@
 
     private async Task UpdateStatus(Order order)
     {
-        // Implement status update dialog/dropdown
+        // Auto-progress to next status for testing
+        var newStatus = (OrderStatus)(((int)order.Status + 1) % 5); // Cycles through all statuses
+    
+        var success = await Service.UpdateOrderStatusAsync(order.Id, newStatus);
+        if (success)
+        {
+            await LoadOrders(); // Refresh the list
+        }
     }
+ 
 }

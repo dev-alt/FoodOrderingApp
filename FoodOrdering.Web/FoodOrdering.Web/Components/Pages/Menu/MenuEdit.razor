@@ -93,11 +93,8 @@
         {
             if (Id.HasValue)
             {
-                var updatedItem = await Service.UpdateMenuItemAsync(Id.Value, menuItem);
-                if (updatedItem != null)
-                {
-                    NavigateBack();
-                }
+                await Service.UpdateMenuItemAsync(Id.Value, menuItem);
+                NavigateBack();
             }
             else
             {
