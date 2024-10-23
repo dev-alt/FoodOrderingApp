@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FoodOrdering.Shared\FoodOrdering.Shared.csproj" />
-    <ProjectReference Include="..\FoodOrdering.Web.Client\FoodOrdering.Web.Client.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">

@@ -1,5 +1,7 @@
 ﻿using FoodOrdering.Shared.Models;
 using FoodOrdering.Web.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FoodOrdering.Web.Api
 {
@@ -7,19 +9,34 @@ namespace FoodOrdering.Web.Api
     {
         public static RouteGroupBuilder MapMenuApi(this RouteGroupBuilder group)
         {
-            group.MapGet("/menu", async (FoodOrderingService service) =>
-                await service.GetMenuItemsAsync());
-
-            group.MapGet("/menu/{id}", async (int id, FoodOrderingService service) =>
-                await service.GetMenuItemAsync(id));
-
-            group.MapPost("/menu", async (MenuItem item, FoodOrderingService service) =>
-                await service.CreateMenuItemAsync(item));
-
-            group.MapPut("/menu/{id}", async (int id, MenuItem item, FoodOrderingService service) =>
+            group.MapGet("/menu", async ([FromServices] IFoodOrderingService service) =>
             {
-                var updatedItem = await service.UpdateMenuItemAsync(id, item);
-                return updatedItem != null ? Results.NoContent() : Results.NotFound();
+                var items = await service.GetMenuItemsAsync();
+                return Results.Ok(items);
+            });
+
+            group.MapGet("/menu/{id}", async (int id, [FromServices] IFoodOrderingService service) =>
+            {
+                var item = await service.GetMenuItemAsync(id);
+                return item is null ? Results.NotFound() : Results.Ok(item);
+            });
+
+            group.MapPost("/menu", async ([FromBody] MenuItem item, [FromServices] IFoodOrderingService service) =>
+            {
+                var result = await service.CreateMenuItemAsync(item);
+                return Results.Created($"/api/menu/{result.Id}", result);
+            });
+
+            group.MapPut("/menu/{id}", async (int id, [FromBody] MenuItem item, [FromServices] IFoodOrderingService service) =>
+            {
+                var result = await service.UpdateMenuItemAsync(id, item);
+                return result ? Results.NoContent() : Results.NotFound();
+            });
+
+            group.MapDelete("/menu/{id}", async (int id, [FromServices] IFoodOrderingService service) =>
+            {
+                var result = await service.DeleteMenuItemAsync(id);
+                return result ? Results.NoContent() : Results.NotFound();
             });
 
             return group;

@@ -2,7 +2,6 @@ using FoodOrdering.Web.Api;
 using FoodOrdering.Web.Api.Data;
 using FoodOrdering.Web.Components;
 using FoodOrdering.Web.Services;
-using FoodOrdering.Web.Client.Services; // Add this
 using Microsoft.EntityFrameworkCore;
 
 namespace FoodOrdering.Web
@@ -12,7 +11,6 @@ namespace FoodOrdering.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents()
@@ -28,9 +26,8 @@ namespace FoodOrdering.Web
                 BaseAddress = new Uri(builder.Configuration["BaseUrl"] ?? "https://localhost:7235/")
             });
 
-            // Register both services
-            builder.Services.AddScoped<FoodOrderingService>();
-            builder.Services.AddScoped<IFoodOrderService, FoodOrderService>();  // Add this
+            // Register both the interface and implementation
+            builder.Services.AddScoped<IFoodOrderingService, FoodOrderingService>();
 
             // Configure CORS
             builder.Services.AddCors(options =>
@@ -46,7 +43,7 @@ namespace FoodOrdering.Web
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Rest of the configuration remains the same...
             if (app.Environment.IsDevelopment())
             {
                 app.UseWebAssemblyDebugging();
@@ -64,8 +61,7 @@ namespace FoodOrdering.Web
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode()
-                .AddInteractiveWebAssemblyRenderMode()
-                .AddAdditionalAssemblies(typeof(Client._Imports).Assembly);
+                .AddInteractiveWebAssemblyRenderMode();
 
             app.MapGroup("/api")
                 .MapMenuApi();
