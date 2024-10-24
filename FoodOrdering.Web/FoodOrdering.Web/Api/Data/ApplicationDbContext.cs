@@ -5,7 +5,7 @@ namespace FoodOrdering.Web.Api.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
-        public DbSet<MenuItem> MenuItems => Set<MenuItem>();
+        public DbSet<FoodMenuItem> MenuItems => Set<FoodMenuItem>();
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
 
@@ -13,8 +13,8 @@ namespace FoodOrdering.Web.Api.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure MenuItem
-            modelBuilder.Entity<MenuItem>(entity =>
+            // Configure FoodMenuItem
+            modelBuilder.Entity<FoodMenuItem>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);

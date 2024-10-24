@@ -5,10 +5,10 @@ namespace FoodOrdering.Web.Services
 {
     public interface IFoodOrderingService
     {
-        Task<List<MenuItem>> GetMenuItemsAsync();
-        Task<MenuItem?> GetMenuItemAsync(int id);
-        Task<MenuItem?> CreateMenuItemAsync(MenuItem item);
-        Task<bool> UpdateMenuItemAsync(int id, MenuItem item);
+        Task<List<FoodMenuItem>> GetMenuItemsAsync();
+        Task<FoodMenuItem?> GetMenuItemAsync(int id);
+        Task<FoodMenuItem?> CreateMenuItemAsync(FoodMenuItem item);
+        Task<bool> UpdateMenuItemAsync(int id, FoodMenuItem item);
         Task<bool> DeleteMenuItemAsync(int id);
         Task<List<Order>> GetOrdersAsync();
         Task<Order?> GetOrderAsync(int id);

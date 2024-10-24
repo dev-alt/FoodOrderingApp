@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace FoodOrdering.MAUI
+namespace FoodOrdering.MAUI.Platforms.MacCatalyst
 {
     public class Program
     {

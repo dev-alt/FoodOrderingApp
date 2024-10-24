@@ -8,17 +8,17 @@ namespace FoodOrdering.Web.Services
     public class FoodOrderingService(ApplicationDbContext context) : IFoodOrderingService
     {
         // Menu Item Methods
-        public async Task<List<MenuItem>> GetMenuItemsAsync()
+        public async Task<List<FoodMenuItem>> GetMenuItemsAsync()
         {
             return await context.MenuItems.ToListAsync();
         }
 
-        public async Task<MenuItem?> GetMenuItemAsync(int id)
+        public async Task<FoodMenuItem?> GetMenuItemAsync(int id)
         {
             return await context.MenuItems.FindAsync(id);
         }
 
-        public async Task<MenuItem?> CreateMenuItemAsync(MenuItem item)
+        public async Task<FoodMenuItem?> CreateMenuItemAsync(FoodMenuItem item)
         {
             context.MenuItems.Add(item);
             var result = await context.SaveChangesAsync();
@@ -27,7 +27,7 @@ namespace FoodOrdering.Web.Services
         }
 
 
-        public async Task<bool> UpdateMenuItemAsync(int id, MenuItem item)
+        public async Task<bool> UpdateMenuItemAsync(int id, FoodMenuItem item)
         {
             var existingItem = await context.MenuItems.FindAsync(id);
             if (existingItem == null) return false;

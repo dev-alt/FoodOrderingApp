@@ -2,24 +2,19 @@
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object sender, EventArgs e)
+        private async void OnViewMenuClicked(object sender, EventArgs e)
         {
-            count++;
+            await Shell.Current.GoToAsync(nameof(Pages.MenuPage));
+        }
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
+        private async void OnViewOrdersClicked(object sender, EventArgs e)
+        {
+            await DisplayAlert("Coming Soon", "Order history will be available in the next update!", "OK");
         }
     }
-
 }

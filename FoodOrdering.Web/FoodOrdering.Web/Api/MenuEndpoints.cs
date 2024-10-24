@@ -21,7 +21,7 @@ namespace FoodOrdering.Web.Api
                 return item is null ? Results.NotFound() : Results.Ok(item);
             });
 
-            group.MapPost("/menu", async ([FromBody] MenuItem item, [FromServices] IFoodOrderingService service) =>
+            group.MapPost("/menu", async ([FromBody] FoodMenuItem item, [FromServices] IFoodOrderingService service) =>
             {
                 var result = await service.CreateMenuItemAsync(item);
 
@@ -34,7 +34,7 @@ namespace FoodOrdering.Web.Api
             });
 
 
-            group.MapPut("/menu/{id}", async (int id, [FromBody] MenuItem item, [FromServices] IFoodOrderingService service) =>
+            group.MapPut("/menu/{id}", async (int id, [FromBody] FoodMenuItem item, [FromServices] IFoodOrderingService service) =>
             {
                 var result = await service.UpdateMenuItemAsync(id, item);
                 return result ? Results.NoContent() : Results.NotFound();

@@ -17,7 +17,7 @@ namespace FoodOrdering.Web.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
-            modelBuilder.Entity("FoodOrdering.Shared.Models.MenuItem", b =>
+            modelBuilder.Entity("FoodOrdering.Shared.Models.FoodMenuItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,13 +115,13 @@ namespace FoodOrdering.Web.Migrations
 
             modelBuilder.Entity("FoodOrdering.Shared.Models.OrderItem", b =>
                 {
-                    b.HasOne("FoodOrdering.Shared.Models.MenuItem", "MenuItem")
+                    b.HasOne("FoodOrdering.Shared.Models.FoodMenuItem", "FoodMenuItem")
                         .WithMany()
                         .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("FoodOrdering.Shared.Models.MenuItem", null)
+                    b.HasOne("FoodOrdering.Shared.Models.FoodMenuItem", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("MenuItemId1");
 
@@ -131,12 +131,12 @@ namespace FoodOrdering.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MenuItem");
+                    b.Navigation("FoodMenuItem");
 
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("FoodOrdering.Shared.Models.MenuItem", b =>
+            modelBuilder.Entity("FoodOrdering.Shared.Models.FoodMenuItem", b =>
                 {
                     b.Navigation("OrderItems");
                 });
