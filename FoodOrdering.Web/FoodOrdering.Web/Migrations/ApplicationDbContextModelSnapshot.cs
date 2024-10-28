@@ -86,9 +86,6 @@ namespace FoodOrdering.Web.Migrations
                     b.Property<int>("MenuItemId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("MenuItemId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -106,8 +103,6 @@ namespace FoodOrdering.Web.Migrations
 
                     b.HasIndex("MenuItemId");
 
-                    b.HasIndex("MenuItemId1");
-
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
@@ -115,15 +110,11 @@ namespace FoodOrdering.Web.Migrations
 
             modelBuilder.Entity("FoodOrdering.Shared.Models.OrderItem", b =>
                 {
-                    b.HasOne("FoodOrdering.Shared.Models.FoodMenuItem", "FoodMenuItem")
+                    b.HasOne("FoodOrdering.Shared.Models.FoodMenuItem", "MenuItem")
                         .WithMany()
                         .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("FoodOrdering.Shared.Models.FoodMenuItem", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("MenuItemId1");
 
                     b.HasOne("FoodOrdering.Shared.Models.Order", "Order")
                         .WithMany("Items")
@@ -131,14 +122,9 @@ namespace FoodOrdering.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("FoodMenuItem");
+                    b.Navigation("MenuItem");
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("FoodOrdering.Shared.Models.FoodMenuItem", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("FoodOrdering.Shared.Models.Order", b =>

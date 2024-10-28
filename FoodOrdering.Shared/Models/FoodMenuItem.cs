@@ -14,8 +14,5 @@ namespace FoodOrdering.Shared.Models
         public decimal Price { get; set; }
         public string Category { get; set; } = string.Empty;
         public bool IsAvailable { get; set; }
-
-        // Navigation property
-        public ICollection<OrderItem> OrderItems { get; set; } = [];
     }
 }

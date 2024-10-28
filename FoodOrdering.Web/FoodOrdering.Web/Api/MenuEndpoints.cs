@@ -27,7 +27,7 @@ namespace FoodOrdering.Web.Api
 
                 if (result is null)
                 {
-                    return Results.BadRequest("Failed to create menu item."); // You can choose a different response if needed
+                    return Results.BadRequest("Failed to create menu item.");
                 }
 
                 return Results.Created($"/api/menu/{result.Id}", result);

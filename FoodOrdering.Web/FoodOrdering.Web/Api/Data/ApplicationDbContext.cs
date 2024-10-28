@@ -18,7 +18,9 @@ namespace FoodOrdering.Web.Api.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Description).IsRequired();
                 entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Category).IsRequired();
             });
 
             // Configure Order
@@ -40,6 +42,7 @@ namespace FoodOrdering.Web.Api.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.UnitPrice).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Notes).IsRequired();
 
                 entity.HasOne(e => e.MenuItem)
                     .WithMany()

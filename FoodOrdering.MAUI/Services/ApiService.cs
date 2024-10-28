@@ -58,13 +58,13 @@ namespace FoodOrdering.MAUI.Services
                 if (!response.IsSuccessStatusCode)
                 {
                     Debug.WriteLine($"Error status code: {response.StatusCode}");
-                    return new List<FoodMenuItem>();
+                    return [];
                 }
 
                 // Try to deserialize the response
                 var items = await response.Content.ReadFromJsonAsync<List<FoodMenuItem>>();
                 Debug.WriteLine($"Successfully deserialized {items?.Count ?? 0} items");
-                return items ?? new List<FoodMenuItem>();
+                return items ?? [];
             }
             catch (Exception ex)
             {

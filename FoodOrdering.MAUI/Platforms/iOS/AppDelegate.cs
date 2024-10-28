@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace FoodOrdering.MAUI
+namespace FoodOrdering.MAUI.Platforms.iOS
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

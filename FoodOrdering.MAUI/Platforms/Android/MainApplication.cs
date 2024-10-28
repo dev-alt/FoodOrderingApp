@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace FoodOrdering.MAUI
+namespace FoodOrdering.MAUI.Platforms.Android
 {
     [Application]
     public class MainApplication : MauiApplication
